@@ -10,12 +10,15 @@ namespace AppCore.API.Controllers
     public class FornecedoresController : BaseController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedoresController(IFornecedorRepository fornecedorRepository, IMapper mapper)
+        public FornecedoresController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService,
+            IMapper mapper)
         {
-            _mapper = mapper;
             _fornecedorRepository = fornecedorRepository;
+            _fornecedorService = fornecedorService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -45,8 +48,9 @@ namespace AppCore.API.Controllers
 
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
 
-            //TODO: Implementar servico de fornecedor para persistensia (camada de negocios)
-            await _fornecedorRepository.Adicionar(fornecedor);
+            var result = await _fornecedorService.Adicionar(fornecedor);
+
+            if (result is false) return BadRequest();
 
             return Ok(fornecedor);
         }
@@ -60,8 +64,9 @@ namespace AppCore.API.Controllers
 
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
 
-            //TODO: Implementar servico de fornecedor para persistensia (camada de negocios)
-            await _fornecedorRepository.Atualizar(fornecedor);
+            var result = await _fornecedorService.Atualizar(fornecedor);
+
+            if (result is false) return BadRequest();
 
             return Ok(fornecedor);
         }
@@ -74,7 +79,9 @@ namespace AppCore.API.Controllers
 
             if (fornecedor is null) return NotFound();
 
-            await _fornecedorRepository.Remover(fornecedor.Id);
+            var result = await _fornecedorService.Remover(fornecedor.Id);
+
+            if (result is false) return BadRequest();
 
             return Ok();
         }
