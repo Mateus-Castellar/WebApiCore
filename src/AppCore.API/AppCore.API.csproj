@@ -21,4 +21,8 @@
     <ProjectReference Include="..\AppCore.Data\AppCore.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
