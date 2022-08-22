@@ -14,7 +14,7 @@ namespace AppCore.API.Controllers
         private readonly IMapper _mapper;
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService,
-            IMapper mapper)
+            IMapper mapper, INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _fornecedorService = fornecedorService;
@@ -44,15 +44,11 @@ namespace AppCore.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Adicionar(FornecedorDTO fornecedorDTO)
         {
-            if (ModelState.IsValid is false) return BadRequest();
+            if (ModelState.IsValid is false) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
+            await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorDTO));
 
-            var result = await _fornecedorService.Adicionar(fornecedor);
-
-            if (result is false) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDTO);
         }
 
         [HttpPut("{id:guid}")]
@@ -60,30 +56,24 @@ namespace AppCore.API.Controllers
         {
             if (id != fornecedorDTO.Id) return BadRequest();
 
-            if (ModelState.IsValid is false) return BadRequest();
+            if (ModelState.IsValid is false) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorDTO));
 
-            var result = await _fornecedorService.Atualizar(fornecedor);
-
-            if (result is false) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDTO);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
-            var fornecedor = _mapper
+            var fornecedorDTO = _mapper
                 .Map<Fornecedor>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
-            if (fornecedor is null) return NotFound();
+            if (fornecedorDTO is null) return NotFound();
 
-            var result = await _fornecedorService.Remover(fornecedor.Id);
+            await _fornecedorService.Remover(fornecedorDTO.Id);
 
-            if (result is false) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse();
         }
     }
 }
