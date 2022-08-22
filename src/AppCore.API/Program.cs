@@ -16,6 +16,8 @@ builder.Services.ResolveDependences();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+
 app.UseApiConfiguration();
 
 app.Run();

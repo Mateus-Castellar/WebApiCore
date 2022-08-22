@@ -2,12 +2,10 @@
 using AppCore.Business.Interfaces;
 using AppCore.Business.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppCore.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class FornecedoresController : BaseController
     {
@@ -25,7 +23,6 @@ namespace AppCore.API.Controllers
             _fornecedorService = fornecedorService;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {

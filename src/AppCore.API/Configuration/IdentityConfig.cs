@@ -1,4 +1,5 @@
 ﻿using AppCore.API.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppCore.API.Configuration
@@ -10,6 +11,11 @@ namespace AppCore.API.Configuration
         {
             services.AddDbContext<ApiIdentityDbContext>(options => options
                 .UseSqlServer(connectionString));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApiIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
             return services;
         }
