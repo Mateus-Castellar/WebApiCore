@@ -1,4 +1,5 @@
 ﻿using AppCore.API.Data;
+using AppCore.API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace AppCore.API.Configuration
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
+                .AddErrorDescriber<IdentityTraducaoMensagensErro>()
                 .AddDefaultTokenProviders();
 
             return services;
