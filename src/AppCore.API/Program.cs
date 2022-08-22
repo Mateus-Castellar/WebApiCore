@@ -7,6 +7,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.AddEnviromentConfiguration();
 
+builder.Services.AddIdentityConfiguration(connectionString);
+
 builder.Services.AddApiConfiguration(connectionString);
 
 builder.Services.ResolveDependences();

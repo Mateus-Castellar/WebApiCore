@@ -21,14 +21,10 @@ namespace AppCore.API.Configuration
             services.AddControllers().AddJsonOptions(lbda
                 => lbda.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            services.AddDbContext<AppCoreDbContext>(options => options
+                .UseSqlServer(connectionString));
+
             services.AddAutoMapper(typeof(Program));
-
-
-            services.AddDbContext<AppCoreDbContext>(options => options
-                .UseSqlServer(connectionString));
-
-            services.AddDbContext<AppCoreDbContext>(options => options
-                .UseSqlServer(connectionString));
 
         }
 
