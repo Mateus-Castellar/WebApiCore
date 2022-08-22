@@ -11,14 +11,16 @@ namespace AppCore.API.Controllers
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService,
-            IMapper mapper, INotificador notificador) : base(notificador)
+            IMapper mapper, IEnderecoRepository enderecoRepository, INotificador notificador) : base(notificador)
         {
-            _fornecedorRepository = fornecedorRepository;
-            _fornecedorService = fornecedorService;
             _mapper = mapper;
+            _fornecedorRepository = fornecedorRepository;
+            _enderecoRepository = enderecoRepository;
+            _fornecedorService = fornecedorService;
         }
 
         [HttpGet]
@@ -74,6 +76,28 @@ namespace AppCore.API.Controllers
             await _fornecedorService.Remover(fornecedorDTO.Id);
 
             return CustomResponse();
+        }
+
+        [HttpGet("endereco/{id:guid}")]
+        public async Task<EnderecoDTO> ObterEnderecoPorId(Guid id)
+        {
+            return _mapper.Map<EnderecoDTO>(await _enderecoRepository.ObterPorId(id));
+        }
+
+        [HttpPut("endereco/{id:guid}")]
+        public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoDTO enderecoDTO)
+        {
+            if (id != enderecoDTO.Id)
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query");
+                return CustomResponse(enderecoDTO);
+            }
+
+            if (ModelState.IsValid is false) return CustomResponse(ModelState);
+
+            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(enderecoDTO));
+
+            return CustomResponse(enderecoDTO);
         }
     }
 }
