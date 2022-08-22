@@ -1,6 +1,6 @@
 ﻿namespace AppCore.Business.Models
 {
-    public class Entity
+    public abstract class Entity
     {
         protected Entity()
         {

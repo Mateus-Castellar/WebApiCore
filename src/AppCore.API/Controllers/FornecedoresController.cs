@@ -83,7 +83,7 @@ namespace AppCore.API.Controllers
 
             if (result is false) return BadRequest();
 
-            return Ok();
+            return Ok(fornecedor);
         }
     }
 }
