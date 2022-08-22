@@ -13,10 +13,8 @@ namespace AppCore.API.Controllers
         private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
 
-        public ProdutosController(INotificador notificador,
-                                  IProdutoRepository produtoRepository,
-                                  IProdutoService produtoService,
-                                  IMapper mapper) : base(notificador)
+        public ProdutosController(INotificador notificador, IProdutoRepository produtoRepository,
+            IProdutoService produtoService, IMapper mapper) : base(notificador)
         {
             _mapper = mapper;
             _produtoRepository = produtoRepository;
@@ -54,6 +52,43 @@ namespace AppCore.API.Controllers
             produtoDTO.Imagem = imagemNome;
 
             await _produtoService.Adicionar(_mapper.Map<Produto>(produtoDTO));
+
+            return CustomResponse(produtoDTO);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO produtoDTO)
+        {
+            if (id != produtoDTO.Id)
+            {
+                NotificarErro("Os ids informados não são iguais!");
+                return CustomResponse();
+            }
+
+            var produtoAtualizacao = await _produtoRepository.ObterProdutoFornecedor(id);
+
+            if (string.IsNullOrEmpty(produtoDTO.Imagem))
+                produtoDTO.Imagem = produtoAtualizacao.Imagem;
+
+            if (ModelState.IsValid is false) return CustomResponse(ModelState);
+
+            if (produtoDTO.ImagemUpload is not null)
+            {
+                var imagemNome = Guid.NewGuid() + "_" + produtoDTO.Imagem;
+
+                if (UploadArquivo(produtoDTO.ImagemUpload, imagemNome) is false)
+                    return CustomResponse(ModelState);
+
+                produtoAtualizacao.Imagem = imagemNome;
+            }
+
+            produtoAtualizacao.FornecedorId = produtoDTO.FornecedorId;
+            produtoAtualizacao.Nome = produtoDTO.Nome;
+            produtoAtualizacao.Descricao = produtoDTO.Descricao;
+            produtoAtualizacao.Valor = produtoDTO.Valor;
+            produtoAtualizacao.Ativo = produtoDTO.Ativo;
+
+            await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
 
             return CustomResponse(produtoDTO);
         }
