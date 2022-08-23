@@ -1,11 +1,14 @@
 ﻿using AppCore.API.DTO;
+using AppCore.API.Extensions;
 using AppCore.Business.Interfaces;
 using AppCore.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppCore.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class FornecedoresController : BaseController
     {
@@ -43,6 +46,7 @@ namespace AppCore.API.Controllers
             return fornecedor;
         }
 
+        [ClaimsAuthorize("Fornecedor", "Adicionar")]
         [HttpPost]
         public async Task<ActionResult> Adicionar(FornecedorDTO fornecedorDTO)
         {
@@ -53,6 +57,7 @@ namespace AppCore.API.Controllers
             return CustomResponse(fornecedorDTO);
         }
 
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
         {
@@ -65,6 +70,7 @@ namespace AppCore.API.Controllers
             return CustomResponse(fornecedorDTO);
         }
 
+        [ClaimsAuthorize("Fornecedor", "Excluir")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
@@ -84,6 +90,7 @@ namespace AppCore.API.Controllers
             return _mapper.Map<EnderecoDTO>(await _enderecoRepository.ObterPorId(id));
         }
 
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("endereco/{id:guid}")]
         public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoDTO enderecoDTO)
         {
