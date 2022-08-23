@@ -73,7 +73,7 @@ namespace AppCore.API.Controllers
             return CustomResponse(loginUser);
         }
 
-        private async Task<string> GerarJWT(string email)
+        private async Task<LoginResponseDTO> GerarJWT(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
@@ -104,7 +104,21 @@ namespace AppCore.API.Controllers
                     new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             }); ;
 
-            return tokenHandler.WriteToken(token);
+            var encodedToken = tokenHandler.WriteToken(token);
+
+            var response = new LoginResponseDTO
+            {
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalSeconds,
+                UserToken = new UserTokenDTO
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Claims = claims.Select(lbda => new ClaimDTO { Type = lbda.Type, Value = lbda.Value })
+                }
+            };
+
+            return response;
         }
 
         private static long ToUnixEpochDate(DateTime date)
