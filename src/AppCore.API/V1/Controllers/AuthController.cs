@@ -1,4 +1,5 @@
-﻿using AppCore.API.DTO;
+﻿using AppCore.API.Controllers;
+using AppCore.API.DTO;
 using AppCore.API.Extensions;
 using AppCore.Business.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -9,9 +10,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AppCore.API.Controllers
+namespace AppCore.API.V1.Controllers
 {
-    [Route("api")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     public class AuthController : BaseController
     {
         private readonly SignInManager<IdentityUser> _signInManager;//gerencia a autenticacao

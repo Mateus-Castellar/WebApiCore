@@ -14,6 +14,19 @@ namespace AppCore.API.Configuration
                 lbda.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddApiVersioning(lbda =>
+            {
+                lbda.AssumeDefaultVersionWhenUnspecified = true;
+                lbda.DefaultApiVersion = new ApiVersion(1, 0);
+                lbda.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(lbda =>
+            {
+                lbda.GroupNameFormat = "'v'VVV";
+                lbda.SubstituteApiVersionInUrl = true;
+            });
+
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen();

@@ -1,4 +1,5 @@
-﻿using AppCore.API.DTO;
+﻿using AppCore.API.Controllers;
+using AppCore.API.DTO;
 using AppCore.API.Extensions;
 using AppCore.Business.Interfaces;
 using AppCore.Business.Models;
@@ -6,10 +7,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AppCore.API.Controllers
+namespace AppCore.API.V1.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class FornecedoresController : BaseController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
@@ -26,6 +28,7 @@ namespace AppCore.API.Controllers
             _fornecedorService = fornecedorService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {

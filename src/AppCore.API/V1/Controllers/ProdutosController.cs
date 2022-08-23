@@ -1,12 +1,16 @@
-﻿using AppCore.API.DTO;
+﻿using AppCore.API.Controllers;
+using AppCore.API.DTO;
 using AppCore.Business.Interfaces;
 using AppCore.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AppCore.API.Controllers
+namespace AppCore.API.V1.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ProdutosController : BaseController
     {
         private readonly IMapper _mapper;
