@@ -29,8 +29,6 @@ namespace AppCore.API.Configuration
 
             services.AddEndpointsApiExplorer();
 
-            services.AddSwaggerGen();
-
             services.AddControllers().AddJsonOptions(lbda
                 => lbda.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
@@ -64,8 +62,6 @@ namespace AppCore.API.Configuration
             if (app.Environment.IsDevelopment())
             {
                 app.UseCors("Development");
-                app.UseSwagger();
-                app.UseSwaggerUI();
             }
             else
             {

@@ -1,4 +1,5 @@
 using AppCore.API.Configuration;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,15 @@ builder.Services.AddIdentityConfiguration(builder.Configuration, connectionStrin
 
 builder.Services.AddApiConfiguration(connectionString);
 
+builder.Services.AddSwaggerConfig();
+
 builder.Services.ResolveDependences();
 
 
 var app = builder.Build();
+var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
+app.UseSwaggerConfig(apiVersionDescriptionProvider);
 
 app.UseAuthentication();
 
