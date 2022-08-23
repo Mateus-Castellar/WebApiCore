@@ -18,7 +18,7 @@ namespace AppCore.API.Controllers
         private readonly IMapper _mapper;
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService,
-            IMapper mapper, IEnderecoRepository enderecoRepository, INotificador notificador) : base(notificador)
+            IMapper mapper, IEnderecoRepository enderecoRepository, INotificador notificador, IUser user) : base(notificador, user)
         {
             _mapper = mapper;
             _fornecedorRepository = fornecedorRepository;

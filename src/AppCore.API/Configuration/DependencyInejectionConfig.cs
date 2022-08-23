@@ -1,4 +1,5 @@
-﻿using AppCore.Business.Interfaces;
+﻿using AppCore.API.Extensions;
+using AppCore.Business.Interfaces;
 using AppCore.Business.Notificacoes;
 using AppCore.Business.Services;
 using AppCore.Data.Context;
@@ -18,6 +19,9 @@ namespace AppCore.API.Configuration
             services.AddScoped<IFornecedorService, FornecedorService>();
             services.AddScoped<IProdutoService, ProdutoService>();
             services.AddScoped<INotificador, Notificador>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUser, AspNetUser>();
 
             return services;
         }

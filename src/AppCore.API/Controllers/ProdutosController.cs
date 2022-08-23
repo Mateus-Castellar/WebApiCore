@@ -14,7 +14,7 @@ namespace AppCore.API.Controllers
         private readonly IProdutoService _produtoService;
 
         public ProdutosController(INotificador notificador, IProdutoRepository produtoRepository,
-            IProdutoService produtoService, IMapper mapper) : base(notificador)
+            IProdutoService produtoService, IMapper mapper, IUser user) : base(notificador, user)
         {
             _mapper = mapper;
             _produtoRepository = produtoRepository;

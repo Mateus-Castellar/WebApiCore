@@ -11,10 +11,21 @@ namespace AppCore.API.Controllers
         //todo codigo compartilhado entre as controller devem estar aqui
 
         private readonly INotificador _notificador;
+        public readonly IUser AppUser;
 
-        public BaseController(INotificador notificador)
+        protected Guid UsuarioId { get; set; }
+        protected bool UsuarioAutenticado { get; set; }
+
+        public BaseController(INotificador notificador, IUser appUser)
         {
             _notificador = notificador;
+            AppUser = appUser;
+
+            if (appUser.IsAuthenticated())
+            {
+                UsuarioAutenticado = true;
+                UsuarioId = appUser.GetUserId();
+            }
         }
 
         protected bool OperacaoValida()
