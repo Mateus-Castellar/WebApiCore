@@ -23,5 +23,5 @@
   $ cd src/AppCore.Data
   
   # Gere a base de dados
-  $ dotnet ef database update --startup-project AppCore.API
+  $ dotnet ef database update --startup-project ../AppCore.API --context AppCoreDbContext
   ```
