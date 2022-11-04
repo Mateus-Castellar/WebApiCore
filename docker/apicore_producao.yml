@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+    
+    sql-server:
+        image: mateus-castellar/api-core-sql:latest
+        container_name: api-core-sql
+        build:
+            context: ../sql
+            dockerfile: ./Dockerfile
+        ports:
+            - "1433:1433"
+        environment:
+            SA_PASSWORD: "MeuDb@123"
+            ACCEPT_EULA: "Y"
+
+
+    web-apicore:
+        image: mateus-castellar/api-core:latest
+        container_name: api-core-web
+        build:
+            context: ../src
+            dockerfile: ./AppCore.API/Dockerfile
+        ports:
+            - "5001:5001"
+            - "5003:5003"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5001
