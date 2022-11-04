@@ -1,5 +1,6 @@
 ﻿using AppCore.API.Controllers;
 using AppCore.API.DTO;
+using AppCore.API.Extensions;
 using AppCore.Business.Interfaces;
 using AppCore.Business.Models;
 using AutoMapper;
@@ -25,6 +26,7 @@ namespace AppCore.API.V1.Controllers
             _produtoService = produtoService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<ProdutoDTO>> ObterTodos()
         {
@@ -32,6 +34,7 @@ namespace AppCore.API.V1.Controllers
                 await _produtoRepository.ObterProdutosFornecedores());
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ProdutoDTO>> ObterPorId(Guid id)
         {
@@ -43,6 +46,7 @@ namespace AppCore.API.V1.Controllers
             return produtoViewModel;
         }
 
+        [ClaimsAuthorize("Produto", "Adicionar")]
         [HttpPost]
         public async Task<ActionResult<ProdutoDTO>> Adicionar(ProdutoDTO produtoDTO)
         {
@@ -60,6 +64,7 @@ namespace AppCore.API.V1.Controllers
             return CustomResponse(produtoDTO);
         }
 
+        [ClaimsAuthorize("Produto", "Editar")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO produtoDTO)
         {
@@ -97,6 +102,7 @@ namespace AppCore.API.V1.Controllers
             return CustomResponse(produtoDTO);
         }
 
+        [ClaimsAuthorize("Produto", "Deletar")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProdutoDTO>> Excluir(Guid id)
         {
