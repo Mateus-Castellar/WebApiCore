@@ -1,12 +1,11 @@
-﻿namespace AppCore.Business.Models
-{
-    public abstract class Entity
-    {
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-        }
+﻿namespace AppCore.Business.Models;
 
-        public Guid Id { get; set; }
+public abstract class Entity
+{
+    protected Entity()
+    {
+        Id = Guid.NewGuid();
     }
+
+    public Guid Id { get; set; }
 }

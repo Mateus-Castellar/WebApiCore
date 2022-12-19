@@ -3,74 +3,73 @@ using AppCore.Business.Notificacoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace AppCore.API.Controllers
+namespace AppCore.API.Controllers;
+
+[ApiController]
+public abstract class BaseController : ControllerBase
 {
-    [ApiController]
-    public abstract class BaseController : ControllerBase
+    //todo codigo compartilhado entre as controller devem estar aqui
+
+    private readonly INotificador _notificador;
+    public readonly IUser AppUser;
+
+    protected Guid UsuarioId { get; set; }
+    protected bool UsuarioAutenticado { get; set; }
+
+    public BaseController(INotificador notificador, IUser appUser)
     {
-        //todo codigo compartilhado entre as controller devem estar aqui
+        _notificador = notificador;
+        AppUser = appUser;
 
-        private readonly INotificador _notificador;
-        public readonly IUser AppUser;
-
-        protected Guid UsuarioId { get; set; }
-        protected bool UsuarioAutenticado { get; set; }
-
-        public BaseController(INotificador notificador, IUser appUser)
+        if (appUser.IsAuthenticated())
         {
-            _notificador = notificador;
-            AppUser = appUser;
-
-            if (appUser.IsAuthenticated())
-            {
-                UsuarioAutenticado = true;
-                UsuarioId = appUser.GetUserId();
-            }
+            UsuarioAutenticado = true;
+            UsuarioId = appUser.GetUserId();
         }
+    }
 
-        protected bool OperacaoValida()
+    protected bool OperacaoValida()
+    {
+        return _notificador.TemNotificacao() is false;
+    }
+
+    protected ActionResult CustomResponse(object result = null)
+    {
+        if (OperacaoValida())
         {
-            return _notificador.TemNotificacao() is false;
-        }
-
-        protected ActionResult CustomResponse(object result = null)
-        {
-            if (OperacaoValida())
+            return Ok(new
             {
-                return Ok(new
-                {
-                    success = true,
-                    data = result
-                });
-            }
-
-            return BadRequest(new
-            {
-                success = false,
-                errors = _notificador.ObterNotificacoes().Select(lbda => lbda.Mensagem)
+                success = true,
+                data = result
             });
         }
 
-        protected ActionResult CustomResponse(ModelStateDictionary modelState)
+        return BadRequest(new
         {
-            if (modelState.IsValid is false) NotificarErroModelInvalida(modelState);
-            return CustomResponse();
-        }
+            success = false,
+            errors = _notificador.ObterNotificacoes().Select(lbda => lbda.Mensagem)
+        });
+    }
 
-        protected void NotificarErroModelInvalida(ModelStateDictionary modelState)
+    protected ActionResult CustomResponse(ModelStateDictionary modelState)
+    {
+        if (modelState.IsValid is false) NotificarErroModelInvalida(modelState);
+        return CustomResponse();
+    }
+
+    protected void NotificarErroModelInvalida(ModelStateDictionary modelState)
+    {
+        var erros = modelState.Values.SelectMany(lbda => lbda.Errors);
+
+        foreach (var erro in erros)
         {
-            var erros = modelState.Values.SelectMany(lbda => lbda.Errors);
-
-            foreach (var erro in erros)
-            {
-                var errorMsg = erro.Exception == null ? erro.ErrorMessage : erro.Exception.Message;
-                NotificarErro(errorMsg);
-            }
+            var errorMsg = erro.Exception == null ? erro.ErrorMessage : erro.Exception.Message;
+            NotificarErro(errorMsg);
         }
+    }
 
-        protected void NotificarErro(string mensagem)
-        {
-            _notificador.Handle(new Notificacao(mensagem));
-        }
+    protected void NotificarErro(string mensagem)
+    {
+        _notificador.Handle(new Notificacao(mensagem));
     }
 }

@@ -1,14 +1,13 @@
 ﻿using System.Security.Claims;
 
-namespace AppCore.Business.Interfaces
+namespace AppCore.Business.Interfaces;
+
+public interface IUser
 {
-    public interface IUser
-    {
-        string Name { get; }
-        Guid GetUserId();
-        string GetUserEmail();
-        bool IsAuthenticated();
-        bool IsInRole(string role);
-        IEnumerable<Claim> GetClaimsIdentity();
-    }
+    string Name { get; }
+    Guid GetUserId();
+    string GetUserEmail();
+    bool IsAuthenticated();
+    bool IsInRole(string role);
+    IEnumerable<Claim> GetClaimsIdentity();
 }

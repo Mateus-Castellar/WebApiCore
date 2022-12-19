@@ -1,11 +1,10 @@
 ﻿using AppCore.Business.Notificacoes;
 
-namespace AppCore.Business.Interfaces
+namespace AppCore.Business.Interfaces;
+
+public interface INotificador
 {
-    public interface INotificador
-    {
-        bool TemNotificacao();
-        List<Notificacao> ObterNotificacoes();
-        void Handle(Notificacao notificacao);
-    }
+    bool TemNotificacao();
+    List<Notificacao> ObterNotificacoes();
+    void Handle(Notificacao notificacao);
 }

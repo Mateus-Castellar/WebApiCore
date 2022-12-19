@@ -86,7 +86,7 @@
 
         private static bool TemDigitosValidos(string valor)
         {
-            var number = valor.Substring(0, TamanhoCnpj - 2);
+            var number = valor[..(TamanhoCnpj - 2)];
 
             var digitoVerificador = new DigitoVerificador(number)
                 .ComMultiplicadoresDeAte(2, 9)
@@ -103,9 +103,9 @@
     {
         private string _numero;
         private const int Modulo = 11;
-        private readonly List<int> _multiplicadores = new List<int> { 2, 3, 4, 5, 6, 7, 8, 9 };
+        private readonly List<int> _multiplicadores = new() { 2, 3, 4, 5, 6, 7, 8, 9 };
         private readonly IDictionary<int, string> _substituicoes = new Dictionary<int, string>();
-        private bool _complementarDoModulo = true;
+        private readonly bool _complementarDoModulo = true;
 
         public DigitoVerificador(string numero)
         {
@@ -154,7 +154,7 @@
             var mod = (soma % Modulo);
             var resultado = _complementarDoModulo ? Modulo - mod : mod;
 
-            return _substituicoes.ContainsKey(resultado) ? _substituicoes[resultado] : resultado.ToString();
+            return _substituicoes.TryGetValue(resultado, out string value) ? value : resultado.ToString();
         }
     }
 

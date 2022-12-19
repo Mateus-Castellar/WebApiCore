@@ -1,11 +1,10 @@
 ﻿using AppCore.Business.Models;
 
-namespace AppCore.Business.Interfaces
+namespace AppCore.Business.Interfaces;
+
+public interface IProdutoService : IDisposable
 {
-    public interface IProdutoService : IDisposable
-    {
-        Task<bool> Adicionar(Produto produto);
-        Task<bool> Atualizar(Produto produto);
-        Task<bool> Remover(Guid id);
-    }
+    Task<bool> Adicionar(Produto produto);
+    Task<bool> Atualizar(Produto produto);
+    Task<bool> Remover(Guid id);
 }

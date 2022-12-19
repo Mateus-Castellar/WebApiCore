@@ -1,8 +1,7 @@
-﻿namespace AppCore.Business.Models
+﻿namespace AppCore.Business.Models;
+
+public enum TipoFornecedor
 {
-    public enum TipoFornecedor
-    {
-        PessoaFisica = 1,
-        PessoaJuridica
-    }
+    PessoaFisica = 1,
+    PessoaJuridica
 }

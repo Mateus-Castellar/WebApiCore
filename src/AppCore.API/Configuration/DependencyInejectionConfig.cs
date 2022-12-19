@@ -6,29 +6,27 @@ using AppCore.Data.Context;
 using AppCore.Data.Repository;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using static AppCore.API.Configuration.SwaggerConfig;
 
-namespace AppCore.API.Configuration
+namespace AppCore.API.Configuration;
+
+public static class DependencyInejectionConfig
 {
-    public static class DependencyInejectionConfig
+    public static IServiceCollection ResolveDependences(this IServiceCollection services)
     {
-        public static IServiceCollection ResolveDependences(this IServiceCollection services)
-        {
-            services.AddScoped<AppCoreDbContext>();
-            services.AddScoped<IFornecedorRepository, FornecedorRepository>();
-            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
-            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        services.AddScoped<AppCoreDbContext>();
+        services.AddScoped<IFornecedorRepository, FornecedorRepository>();
+        services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+        services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
-            services.AddScoped<IFornecedorService, FornecedorService>();
-            services.AddScoped<IProdutoService, ProdutoService>();
-            services.AddScoped<INotificador, Notificador>();
+        services.AddScoped<IFornecedorService, FornecedorService>();
+        services.AddScoped<IProdutoService, ProdutoService>();
+        services.AddScoped<INotificador, Notificador>();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUser, AspNetUser>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUser, AspNetUser>();
 
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-            return services;
-        }
+        return services;
     }
 }
