@@ -33,12 +33,15 @@ dotnet run --project ./src/AppCore.API
 ```shell
 https://localhost:7196/swagger/index.html
 ```
+## *Prints*
+![screenshot](./docs/endpoints.png)
 
-## *Pacote do projeto*
--FluentValidation
--EntityFrameworkCore
--Swagger
--AutoMapper
+
+## *Pacotes do projeto*
+- FluentValidation
+- EntityFrameworkCore
+- Swagger
+- AutoMapper
 
 
 
