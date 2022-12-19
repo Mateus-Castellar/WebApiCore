@@ -1,9 +1,10 @@
 # **Web Api .Net Core 7 Rest**
 
 ## *Ferramentas e Tecnologias*
-- Visual Studio 2022
-- SQL Server Localdb
-- Azuere Data Studio
+- Visual Studio 2022 ([download](https://visualstudio.microsoft.com/pt-br/downloads/))
+- SQL Server Localdb ([download](https://learn.microsoft.com/pt-br/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16))
+- Azure Data Studio ([download](https://azure.microsoft.com/pt-br/products/data-studio/))
+- .NET 7 ([download](https://dotnet.microsoft.com/en-us/download/dotnet/7.0))
 
 ## *Rodar o projeto localmente*
 
